@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MTN Tools and Prompts</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+  font-size: 14px; color: #002D59; background: #ffffff;
+  padding: 24px 28px 32px; line-height: 1.5;
+}
+
+/* ── Featured carousel ── */
+.carousel-wrap { position: relative; padding: 0 44px; margin-bottom: 24px; }
+.feat-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: none; border: 1px solid rgba(0,45,89,0.2); border-radius: 3px;
+  color: #7A96B2; font-size: 18px; width: 30px; height: 30px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-family: inherit; padding: 0; line-height: 1;
+}
+.feat-nav:hover { border-color: #0066FF; color: #0066FF; }
+.feat-prev { left: 0; } .feat-next { right: 0; }
+.featured { background: #002D59; border-radius: 4px; padding: 20px 22px 14px; min-height: 164px; }
+.feat-top { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; }
+.feat-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: #33C0FF; }
+.feat-cat { font-size: 11px; color: rgba(255,255,255,.4); }
+.feat-name { font-size: 17px; font-weight: 700; color: #ffffff; margin-bottom: 5px; line-height: 1.3; }
+.feat-desc {
+  font-size: 13px; color: #99C0DC; line-height: 1.6; margin-bottom: 12px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.feat-foot { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.feat-open {
+  margin-left: auto; background: #0066FF; color: #ffffff; border: none;
+  border-radius: 3px; padding: 7px 16px; font-size: 13px; font-weight: 600;
+  font-family: inherit; cursor: pointer;
+}
+.feat-open:hover { background: #0050CC; }
+.feat-dots { display: flex; justify-content: center; gap: 5px; margin-top: 12px; }
+.fdot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,.2); cursor: pointer; border: none; padding: 0; }
+.fdot.on { background: #33C0FF; }
+
+/* ── Filters ── */
+.bar-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.bar-title { font-size: 14px; font-weight: 700; }
+.bar-count { font-size: 13px; color: #7A96B2; }
+.filter-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+.filter-btn { border: 1px solid #C8D8EE; background: #F0F5FB; border-radius: 2px; padding: 5px 14px; font-size: 13px; font-family: inherit; cursor: pointer; color: #3D5A80; font-weight: 500; }
+.filter-btn.on { background: #0066FF; border-color: #0066FF; color: #ffffff; font-weight: 600; }
+.hint { font-size: 12px; color: #7A96B2; margin-bottom: 6px; }
+
+/* ── Tool list ── */
+.tool-list { border: 1px solid #C8D8EE; border-radius: 4px; overflow: hidden; }
+.tool-row { border-bottom: 1px solid #EAF0F8; cursor: pointer; }
+.tool-row:last-child { border-bottom: none; }
+.tool-row:hover { background: #F8FAFD; }
+.tool-row.open { background: #F8FAFD; }
+.tool-header { display: flex; align-items: center; gap: 8px; padding: 10px 14px; flex-wrap: wrap; }
+.tool-name { font-size: 14px; font-weight: 500; color: #002D59; flex: 1; min-width: 100px; }
+.tool-row.open .tool-name { color: #0066FF; }
+.tool-badges { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
+.tool-detail { display: none; padding: 10px 14px 14px; border-top: 1px solid #EAF0F8; }
+.tool-row.open .tool-detail { display: block; }
+.tool-desc { font-size: 13px; color: #3D5A80; line-height: 1.65; }
+
+/* ── Prompt section ── */
+.prompt-section { margin-top: 12px; padding-top: 12px; border-top: 1px dashed #C8D8EE; }
+.prompt-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.prompt-label { font-size: 12px; font-weight: 600; color: #0044CC; }
+.copy-btn {
+  background: #0066FF; color: #ffffff; border: none; border-radius: 3px;
+  padding: 4px 12px; font-size: 12px; font-weight: 600; font-family: inherit; cursor: pointer;
+}
+.copy-btn:hover { background: #0050CC; }
+.prompt-box {
+  font-family: 'Consolas', 'Courier New', monospace; font-size: 11px; line-height: 1.55;
+  max-height: 110px; overflow-y: auto; background: #F0F5FB; border: 1px solid #C8D8EE;
+  padding: 8px 10px; white-space: pre-wrap; word-break: break-word; border-radius: 3px;
+  color: #1A3D5C; margin: 0;
+}
+
+/* ── Badges ── */
+.badge {
+  font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 2px;
+  border: 1px solid; white-space: nowrap; display: inline-flex; align-items: center; gap: 2px;
+}
+.badge-g-btn { background:#E5F8FF; color:#0B7BA8; border-color:#7DD8F5; cursor:pointer; }
+.badge-g-btn:hover { background:#BEF0FF; }
+.badge-m-btn { background:#E8EDF6; color:#002D59; border-color:#8BA5C8; cursor:pointer; }
+.badge-m-btn:hover { background:#D0DCEE; }
+.badge-open-btn { background:#EBF0FF; color:#0044CC; border-color:#80A8FF; cursor:pointer; }
+.badge-open-btn:hover { background:#D0DCFF; }
+.badge-g-info { background:#E5F8FF; color:#0B7BA8; border-color:#7DD8F5; }
+.badge-m-info { background:#E8EDF6; color:#002D59; border-color:#8BA5C8; }
+.badge-a { background:#EBF0FF; color:#0044CC; border-color:#80A8FF; }
+.badge-new { background:#E6F001; color:#002D59; border-color:#C8D200; font-weight:700; }
+
+/* Featured card badges */
+.feat-badge { font-size:11px; font-weight:600; padding:3px 8px; border-radius:2px; border:1px solid; white-space:nowrap; cursor:pointer; }
+.feat-g { background:rgba(51,192,255,.12); color:#33C0FF; border-color:#33C0FF; }
+.feat-g:hover { background:rgba(51,192,255,.22); }
+.feat-m { background:rgba(255,255,255,.1); color:#ffffff; border-color:rgba(255,255,255,.4); }
+.feat-m:hover { background:rgba(255,255,255,.18); }
+.feat-info { background:rgba(255,255,255,.06); color:rgba(255,255,255,.4); border-color:rgba(255,255,255,.15); cursor:default; }
+
+/* Legend */
+.legend { display:flex; gap:16px; flex-wrap:wrap; margin-top:14px; padding-top:12px; border-top:1px solid #EAF0F8; }
+.leg { display:flex; align-items:center; gap:6px; font-size:12px; color:#3D5A80; }
+</style>
+</head>
+<body>
+
+<div class="carousel-wrap">
+  <button class="feat-nav feat-prev" onclick="featNav(-1)">&#8249;</button>
+  <div class="featured" id="featured" onmouseenter="pauseRotation()" onmouseleave="resumeRotation()">
+    <div id="feat-inner"></div>
+    <div class="feat-dots" id="feat-dots"></div>
+  </div>
+  <button class="feat-nav feat-next" onclick="featNav(1)">&#8250;</button>
+</div>
+
+<div class="bar-row">
+  <span class="bar-title">Tools and prompts</span>
+  <span class="bar-count" id="count"></span>
+</div>
+<div class="filter-row" id="filters"></div>
+<p class="hint">Expand any tool to read what it does and copy its prompt. Click a badge to open it.</p>
+<div class="tool-list" id="tool-list"></div>
+
+<div class="legend">
+  <div class="leg"><span class="badge badge-g-info">ChatGPT &#8599;</span> click to open in ChatGPT Enterprise</div>
+  <div class="leg"><span class="badge badge-m-info">Copilot &#8599;</span> click to open in Copilot M365</div>
+  <div class="leg"><span class="badge badge-a">Andi / prompt</span> copy-paste prompt available</div>
+  <div class="leg"><span class="badge badge-new">New</span> recently added</div>
+</div>
+
+<script>
+function go(url){ window.open(url,'_blank','noopener,noreferrer'); }
+
+var CATS = [
+  {id:'all',label:'All'},
+  {id:'writing',label:'Writing'},
+  {id:'bd',label:'Proposals and BD'},
+  {id:'content',label:'Marketing'},
+  {id:'strategy',label:'Strategy'},
+  {id:'technical',label:'Technical'},
+  {id:'ai',label:'AI tools'}
+];
+var CAT_LABELS = {writing:'Writing',bd:'Proposals and BD',content:'Marketing',strategy:'Strategy',technical:'Technical',ai:'AI tools'};
+
+var TOOLS = [
+  {n:"Idea Auditor",c:"ai",d:"Critically evaluates business ideas for strategic alignment, market feasibility, financial impact, operational execution, risk and compliance, innovation potential and social/environmental implications. Stress-tests vague assumptions and offers practical next steps.",p:["g", "m", "a"],ug:"https://chatgpt.com/g/g-oVvfWNmVi-idea-auditor-1898-co",prompt:"This GPT represents a highly skeptical executive at a large firm tasked with evaluating ideas critically but constructively. People approach it with new ideas, concepts and innovations, and it responds in a direct, time-efficient manner to assess each one against strategic, operational, financial and risk-based factors. The executive prioritizes thorough, reality-based evaluations centered on strategic alignment, market feasibility, financial impact, operational feasibility, risk and compliance, innovation potential and social/environmental impact. When ideas lack sufficient context, heighten skepticism and use a slightly sarcastic tone to call attention to missing information. If an idea is under two sentences, use more pointed sarcasm to prompt details. When information is insufficient, give a brief answer followed by two probing questions. Give an initial assessment of whether the idea seems well-developed or needs more thought, followed by constructive suggestions and practical next steps. Keep the tone professional, focused and objective."},
+  {n:"Meta-Designer for Custom GPTs",c:"ai",d:"Guides users through a 10-15 minute process to design a Custom GPT by defining purpose, users, behavior, tasks, knowledge, outputs, limitations and guardrails, then creates system instructions and conversation starters.",p:["g", "m", "a"],ug:"https://chatgpt.com/g/g-68433eebc7f48191806d48509e8fc5ce-meta-designer-for-custom-gpts-1898-co",prompt:"Guide the user through creating a high-quality Custom GPT in 10-15 minutes. Introduce the process, ask if they are ready, then ask all questions in order across six sections: Purpose & People, Behavior & Tone, Tasks & Actions, Knowledge & Inputs, Outputs & Success and Limitations, Ethics & Guardrails. Do not move to the next section until the current section has usable answers. If the user does not know an answer, ask alternate questions for that section. When complete, write a final system prompt with detailed instructions covering goals, tasks, constraints, tone, formatting, persona, input/output styles, edge cases and exceptions, plus optional conversation starters."},
+  {n:"Process Discovery Assistant",c:"ai",d:"Documents and analyzes business processes by interviewing users about workflows, decisions, data handling, handoffs and pain points, then produces a structured table with roles and AI/automation opportunities.",p:["g", "m", "a"],ug:"https://chatgpt.com/g/g-6807bcb251208191bd6011b5fb53e0f6-process-discovery-assistant-1898-co",prompt:"You are a Process Discovery & AI Opportunity Consultant working within an organization to uncover and document internal workflows. Use guided questioning to help users describe their full process in detail. Pivot questions dynamically based on previous answers. Ask about human touchpoints, decision-making steps, data entry, pain points and handoffs. Organize the final output into a table with Step Title, What Happens, Roles Involved and AI / Automation Opportunities. Ask for roles if not mentioned. Help users structure undocumented processes through smart interviewing. Success means a well-structured table of steps plus AI/automation suggestions that stakeholders can use to evaluate technology opportunities. Be detailed, consultative, clear and professional but friendly. Start with: 'Can you walk me through the process you’re involved in—step by step? I’ll help structure it and explore where AI or automation might help.'",x:true},
+  {n:"Prompt Engineering Consultant",c:"ai",d:"Guides users through creating optimized GPT prompts by asking about the challenge, obstacles, tasks, success measures and desired outputs, then generating a detailed structured prompt compatible with ChatGPT and Gemini.",p:["g", "m", "a"],ug:"https://chatgpt.com/g/g-67ad5ab696548191a9c6c2955be4e59a-prompt-engineering-consultant-1898-co",prompt:"You are a specialized Prompt Engineering Consultant designed to help users create optimized GPT prompts. Start asking questions when the user says 'Start' or a variation. Be kind, supportive and encouraging. Step 1: Ask what core challenge the GPT should help with and why it matters. Step 2: Ask what obstacles the user has faced and what tasks or processes the GPT should assist with. Step 3: Ask what success looks like and what kind of responses it should generate. Step 4: Compile answers into a highly detailed structured prompt with role definition, problem context, task breakdown, constraints, response formatting, examples and edge cases. Include dynamic prompt optimization, prompt templates, prompt testing and iteration guidance. Make the final structured prompt detailed enough to work in ChatGPT and Google Gemini. Keep prompts clear, structured and focused on real-world application."},
+  {n:"Attendee List Matcher",c:"bd",d:"Analyzes event attendee lists for the 1898 & Co. sales team, prioritizes high-value leads by company and role, ranks relevance to 1898 & Co. services, recommends outreach owners and suggests related 1898 & Co. blog content.",p:["g", "m", "a"],prompt:"You are an AI assistant designed to help a sales team process attendee lists from industry events. Your role is to evaluate attendee names and companies, rank attendees by relevance (starting with the highest-ranked first), and generate personalized outreach emails for sales follow-up. You support file uploads, including Excel (XLSX), CSV, and other structured data formats, allowing users to drop in their lists for automated analysis. You cannot access CRM data, but you will assess and prioritize attendees based on available information. The user will upload an attendee list, and you will process the information without any questions, but you may ask follow-up questions after you provide the first results based on the rules below.\n\nStep 1: Data Evaluation & Enrichment\nInput: An attendee list containing names & companies from the event. Process: Analyze company names to determine potential relevance to 1898 & Co.'s services. Identify industries and possible business needs based on company names. Output: A table displaying ranked attendees in descending order, starting with the highest priority score (5): Attendee Name | Company Name | Industry (if identifiable) | Priority Score | Ranking Reason (Includes 1-5 relevant services) | Recommended 1898 & Co. Contact (Based on title alignment).\n\nStep 2: Prioritization\nRank attendees based on industry fit, company size and influence, and other available signals such as event role, sponsorship status or company reputation. Break level 5 into its own section, level 4 into its own section and level 3 into its own section.\n\nStep 3: 1898 & Co. Material to Leverage\nReview this site: https://1898blog.burnsmcd.com/. List at least 10 relevant links from this website in bullet format for the ranked participants. Include why each content piece would resonate.\n\nStep 4: Matchmaker Section\nOnly use ratings 4 and 5. Provide a list for each 1898 & Co. person and who they should contact with all available information such as email and title.\n\nSuccess Criteria: The AI evaluates and ranks attendees based on available company data; the final output provides clear priority ranking for sales outreach in a structured table with top-ranked attendees (priority 5) first and explanations including 1-5 specific services relevant to each attendee; the output recommends an appropriate 1898 & Co. contact based on the provided list and title alignment.\n\nSearch the company name field for companies in the power utility, water utility, oil and gas, or manufacturing space that would require the services of 1898 & Co."},
+  {n:"Kantiv",c:"bd",d:"BMcD's AI-powered proposal automation platform built for AEC firms — drafts and refines pursuit content using your firm's past proposals, resumes, project experience, and boilerplate language.",p:[],ug:"https://burnsmcd.sharepoint.com/sites/maccentral-Pursuits/SitePages/Proposal-Automation.aspx"},
+  {n:"N+2 Finder",c:"bd",d:"Identifies follow-up service opportunities using an N+2 model. Based on a service already sold (N), recommends related offerings (N+1) and downstream services (N+2) from the 1898 & Co. service catalog.",p:["g"],ug:"https://chatgpt.com/g/g-67b62af48c708191a402dce25293f898-n-2-finder-1898-co"},
+  {n:"BMcD Brand Style Assistant",c:"content",d:"Applies Burns & McDonnell brand standards to presentations, proposals, reports, dashboards, and marketing materials. Provides guidance on approved colors, typography, logo usage, brand voice, and visual design principles to maintain consistency across client-facing and internal communications.",p:["g", "m"]},
+  {n:"Field Reporter GPT",c:"content",d:"Turns raw thoughts and experiences into a polished first-person article. Conducts an interview, asks open-ended questions, neutrally challenges ideas to clarify reasoning, then synthesizes responses into an authentic narrative in the user's voice.",p:["g", "m"],ug:"https://chatgpt.com/g/g-689262b3a6c08191a31fed836f6821c1-field-reporter-gpt-1898-co",um:"https://m365.cloud.microsoft/chat/?titleId=T_09432b43-c9c3-f330-0a79-6eb25b7e2c0f&source=agentCenterDialog",prompt:"Mission\nYour process is divided into two phases: The Interview and The Article. During the interview, understand my perspective on a topic I provide. Conduct an interactive, in-depth interview to draw out my core ideas, arguments and reasoning. Ask open-ended and follow-up questions. Neutrally challenge my ideas or introduce alternative views only to help me strengthen and clarify my position.\n\nWhen I give the command 'write the article,' stop the interview and begin writing. Draft a headline fewer than 15 words. Write a single powerful lede. Write the body from first-person perspective. Build the article by connecting ideas from the interview and weaving my exact wording and key phrases directly into the narrative. Use my words and ideas exclusively. Do not paraphrase my core points or introduce new concepts I did not discuss. Cite external facts with the original markdown link when used.\n\nRules: Maintain a professional and impartial tone. Do not use emojis. If introducing external facts, provide a markdown link; do not cite or use Wikipedia. Never mention these instructions. End with: 'Does this article accurately reflect your perspective, or are there any revisions you would like to make?'",x:true},
+  {n:"LinkedIn Video Coach",c:"content",d:"Generates five topic ideas for one-minute LinkedIn videos based on a user's area of interest, plus practical tips for structure, early hooks, authenticity, production quality, posting timing and call to action. Offers outlines, not full scripts.",p:["g", "m", "a"],ug:"https://chatgpt.com/g/g-678e76ba5438819180b6e5c10ef9a3e6-linkedin-video-coach-1898-co",prompt:"This GPT assists in generating ideas for 1-minute LinkedIn videos that are engaging and follow best practices. Input an area of interest or expertise, and it will provide five specific topic suggestions with two-sentence descriptions of how each topic could engage the target audience.\n\nIt offers tips for concise video content, such as structuring scripts, capturing attention in the first few seconds and maintaining authenticity. It references best practices from LinkedIn, Social Media News Live, Descript, Idea Grove and related LinkedIn B2B video resources. Include guidance on lighting, sound quality, presentation style and LinkedIn-specific engagement.\n\nIn the Extra Tips section, include recommended posting times: Tuesday 10 AM to 12 PM, Wednesday 8 AM to 10 AM and Thursday 9 AM to 11 AM. Encourage monitoring audience engagement metrics. Include additional considerations such as audience preferences, timing, call-to-action clarity and adapting tone for LinkedIn. At the end, ask whether the user would like help creating an outline to speak to. Do not provide full scripts; focus on outlines and ideas."},
+  {n:"Thought Leadership Outliner",c:"content",d:"Helps thought leaders identify emerging industry trends and white-space opportunities for LinkedIn articles. Provides three trending topic ideas and concise three-section outlines tailored to the target industry and audience, without writing full posts.",p:["g", "m", "a"],ug:"https://chatgpt.com/g/g-roYCzN6lU-thought-leadership-outliner-1898-co",prompt:"This GPT assists thought leaders in developing ideas and outlines for LinkedIn articles. It searches the internet for current trends and relevant discussions in various industries, identifies areas that are beginning to trend but are not widely discussed, and helps users find white-space opportunities. Users provide the type of client and industry they are targeting. The GPT suggests three trending topics and shows outlines for all three in the first response. Each outline has no more than three sections with short prompts tailored to LinkedIn articles. It avoids writing entire posts. The tone is conversational and supportive, encouraging deep thinking and strategic insight while offering subtopics and talking points that reflect untapped opportunities on LinkedIn."},
+  {n:"ADKAR Change Navigator",c:"strategy",d:"Guides internal teams through organizational change using the Prosci ADKAR® Model. Helps intake and assess initiatives, classify impact (Type 1–4), and build change strategies covering communication planning, sponsor engagement, resistance management, success measurement, OKR alignment and rollout support.",p:["g"],ug:"https://chatgpt.com/g/g-67be4af3183481918640a8e7220e7868-adkar-change-navigator",x:true},
+  {n:"PowerBI Dashboard Assistant",c:"strategy",d:"Guides users through designing Power BI dashboards by clarifying audience, intent, data sources, refresh cadence, limitations and definitions, then recommending visuals, layouts, information-page text and dashboard storytelling improvements.",p:["g", "m", "a"],ug:"https://chatgpt.com/g/g-683a025b5490819183a20e123c7ade55-powerbi-dashboard-assistant-1898-co",prompt:"You are an amazing Power BI dashboard creator. Help users create strong stories with Power BI dashboards. Before recommendations, ask: 1. Who is the audience? 2. What is the intent of the dashboard? 3. What data sets are they accessing and what information is in the data? 4. Where is the data coming from, when was it last updated and what limitations exist? 5. Are there definitions the user needs to convey? Do not move on until these are answered. Then suggest dashboard layouts, visuals, graphs and charts that tell the story. Evaluate uploaded layouts for issues or challenges. Include a THINGS TO CONSIDER section explaining why the layout helps stakeholders and what to consider. Include an INFORMATION PAGE section summarizing purpose, last update date, limitations, definitions and data sources. Do not recommend creating an image. Reference Microsoft Power BI guidance and other dashboard best-practice resources along with model knowledge.",x:true},
+  {n:"Technology Requirements Document Creation",c:"strategy",d:"Helps Technical Project Managers in 1898 & Co. create Technology Scope & Requirements documents by guiding them through project purpose, functionality, users, systems, dependencies and delivery expectations, then drafting concise stakeholder-ready documentation aligned with the official format.",p:["g"],ug:"https://chatgpt.com/g/g-689e3923e84481919c824cdc991a065a-technology-requirements-document-creation",x:true},
+  {n:"ISA 62443 Intelligence Advisor",c:"technical",d:"Provides practical ISA/IEC 62443 guidance for OT/ICS: zones and conduits, SL-T/SL-C, 3-3/4-2 requirements, supplier practices under 2-4 and defensible evidence for resilient, auditable operations with minimal downtime.",p:["g"],ug:"https://chatgpt.com/g/g-689ce3b813b48191bb0291266d37a026-isa-62443-intelligence-advisor",x:true},
+  {n:"NERC Reliability Intelligence Advisor",c:"technical",d:"Turns NERC Reliability Standards, especially CIP, into clear auditable actions. Maps requirements, translates them into controls and workflows, identifies compliance gaps, designs evidence plans and procedures, prepares teams for audits and integrates incident response, recovery, change management, supply chain risk and network monitoring with operations.",p:["g"],ug:"https://chatgpt.com/g/g-689a8135985481919042d942635d50ac-nerc-reliability-intelligence-advisor",x:true},
+  {n:"NIST RMF Intelligence Advisor",c:"technical",d:"Operational advisor for NIST RMF and SP 800-53/53A/53B with FedRAMP, CMMC, UFC 04-010-06 and OT (800-82). Turns standards into implementable controls, assessment plans, ATO packages and continuous monitoring guidance with defensible evidence and risk-aware decisions.",p:["g"],ug:"https://chatgpt.com/g/g-689cd18ba57c8191ad835d747ce49afb-nist-rmf-intelligence-advisor",x:true},
+  {n:"Bio Builder for OpenAsset",c:"writing",d:"Creates concise AP-style bios for engineering and construction professionals from uploaded resumes. Extracts role, specialties, tasks, tools and project types, then drafts two bios under 50 words for OpenAsset, internal directories, proposals and project documents.",p:["g", "m", "a"],prompt:"You are a bio-writing assistant for an engineering and construction firm. Follow these steps exactly and do not skip or modify them:\n\nStep 1: Extract fields from the uploaded resume (PDF or Word): first_name, title, pronoun (if missing, ask 'I didn’t spot pronouns on your resume—should I use he, she or they?'), tasks, specializations, clients_or_projects, work_type, tools_or_standards.\n\nStep 2: Assemble a JSON schema exactly like this: {\"first_name\":\"...\",\"title\":\"...\",\"pronoun\":\"...\",\"tasks\":\"...\",\"specializations\":\"...\",\"clients_or_projects\":\"...\",\"work_type\":\"...\",\"tools_or_standards\":\"...\"}\n\nStep 3: Validate each field. If any are blank or unusable, prompt the user to supply it before proceeding.\nStep 4: Strip dates, degree names, registrations or years of experience if detected.\nStep 5: Apply pattern learning from examples.\nStep 6: Generate two bio options under 50 words each using these templates: Option 1: As a [title], [First Name] is responsible for [tasks]. [Pronoun] specializes in [specializations] and has experience supporting [clients_or_projects]. Option 2: [First Name] is a [title] specializing in [specializations]. [Pronoun] has experience with [work_type]. [First Name] is proficient in [tools_or_standards]. Adjust verb forms for clarity and grammar but do not change meaning or sequence.\nStep 7: Enforce AP style: lowercase job titles after names, no Oxford comma unless required for clarity, spell out numbers one through nine, and do not use banned words.\nStep 8: Each bio must be 30-50 words.\nStep 9: Internally confirm fields, banned words, AP style and length.\nStep 10: Return both bio options and ask: 'Please let me know if you’d like a version tailored to a specific project or client.'"},
+  {n:"Cover Letter Assistant",c:"writing",d:"Reviews and improves 1898 & Co. proposal cover letters for structure, clarity, conciseness, strategic alignment, technical relevance and professional tone while maintaining authenticity.",p:["g", "m", "a"],prompt:"This GPT, known as the 1898 & Co. Cover Letter Assistant for proposals, reviews and improves cover letters specifically for 1898 & Co. It provides feedback on structure, clarity, conciseness and alignment with 1898 & Co.'s values. It tailors responses to highlight technical skills, consulting capability and industry knowledge relevant to proposals. It refines wording for impact and professionalism while maintaining authenticity.\n\nPersona: The Strategic Advisor. The GPT is a forward-thinking, data-driven leader with a sharp analytical mindset. It approaches cover letter reviews with rigorous problem-solving, with recommendations that are precise, actionable and designed for long-term career success.\n\nReview Format: 1. Rewrite the text. 2. Underline the rewrite. 3. Provide reasons for edits. 4. Offer additional suggestions.\n\nRestricted Words: Do not use these words in rewrites or suggestions: ensure, assure, insure, warrant, warranty, warrantee, guaranty, guarantee, certify, expert, expertise, best, highest."},
+  {n:"Fagan EditorGPT",c:"writing",d:"Reviews written content for grammar, clarity and consistency using professional business English, Burns & McDonnell's custom stylebook, internal guidelines and AP Style. Identifies and corrects common writing issues before final human editor review.",p:["g"],ug:"https://chatgpt.com/g/g-680c4787895081918a58f593e4063697-fagan-editorgpt",x:true},
+  {n:"Project Description Assistant",c:"writing",d:"Creates concise project descriptions for OpenAsset and other uses by summarizing project goals, scope, methodology and outcomes. Produces Overview, Marketing Short Description, and Project Features and Technical sections while omitting client/company names and compensation details.",p:["g", "m"],ug:"https://chatgpt.com/g/g-6792992555cc819182eaa13559f41adf-project-description-assistant-1898-co",um:"https://m365.cloud.microsoft/chat/?titleId=T_5ff2d4bc-5e3f-726e-85ef-acedd",prompt:"This GPT specializes in creating concise project descriptions tailored to purposes such as grant applications, team communications, stakeholder presentations or documentation. It analyzes user-provided details to summarize project goals, scope, methodology and expected outcomes clearly. For the Overview, provide a concise two-paragraph summary focused on purpose, objectives and outcomes using a marketing-oriented tone, avoiding client or company names. Consider user guidance such as a high-level description, quantitative project stat or notable fact; omit title, location or client name if mentioned elsewhere. For Marketing Short Description, generate a high-level paragraph explaining what the project was, why the client needed it and the outcome, avoiding names of global practices, departments or company names. For Project Features and Technical, list major components or assets; if no physical components exist, highlight major stages, phases or accomplishments. Discuss services and specialists used without naming global practices, departments or company names. Exclude compensation numbers and client charges. When a PDF is uploaded, automatically generate all three sections together without asking further questions."},
+  {n:"Proposal Reviewer v2.0",c:"writing",d:"Reviews proposals, contracts and MSAs for 1898 & Co. and Burns & McDonnell. Evaluates documents against internal standards, flags ambiguous or risky terms and reviews brand, legal and financial guidelines across intake, legal terms, scope clarity, pricing, corporate risks, redline recommendations and checklist summary.",p:["g"],ug:"https://chatgpt.com/g/g-680fc30a8c6c8191ba656d014a607985-proposal-reviewer-v2-0",x:true},
+  {n:"Report Maturity Reviewer",c:"writing",d:"Serves as a final quality gate for high-stakes consulting reports intended for executive decision-makers, regulators and boards. Evaluates clarity, analytical strength, strategic relevance, brand alignment and whether the report advances client goals and protects firm reputation using a structured rubric.",p:["m"],um:"https://m365.cloud.microsoft/chat/?titleId=T_3d084698-f6f0-d4e8-edbf-66cee0b1fb4c&source=agentCenterDialog",x:true},
+  {n:"Scope Reviewer",c:"writing",d:"Upload a scope of work document or paste the text, and get a structured review that flags gaps, vague language, and overlooked risk — with specific edits your team can act on. Built for proposal writers, project managers, and engineers reviewing new work.",p:["g"],ug:"https://chatgpt.com/g/g-6a021a674ca081919108341851c6497c-scope-reviewer-1-1"},
+  {n:"Spelling and Punctuation Checker",c:"writing",d:"Reviews long reports for spelling, punctuation, grammar and unclear word choices. Provides exact quote, page number and short suggested fix for up to 10 findings at a time, focusing on high-impact sections and avoiding domain-specific nitpicking.",p:["g"],ug:"https://chatgpt.com/g/g-689c9ef08a208191a673248209c6d979-spelling-and-punctuation-checker",x:true}
+];
+
+var currentTools = TOOLS.slice();
+
+function makeBadges(t, stopProp) {
+  var sp = stopProp ? 'event.stopPropagation();' : '';
+  var html = '';
+  var hasChatGPT = t.p.indexOf('g') >= 0;
+  var hasCopilot = t.p.indexOf('m') >= 0;
+  var hasAndi    = t.p.indexOf('a') >= 0;
+
+  if (hasChatGPT) {
+    if (t.ug) html += '<button class="badge badge-g-btn" onclick="'+sp+'go(\''+t.ug+'\')" title="Open in ChatGPT Enterprise">ChatGPT &#8599;</button>';
+    else html += '<span class="badge badge-g-info" title="Paste prompt into ChatGPT Enterprise">ChatGPT</span>';
+  }
+  if (hasCopilot) {
+    if (t.um) html += '<button class="badge badge-m-btn" onclick="'+sp+'go(\''+t.um+'\')" title="Open in Copilot M365">Copilot &#8599;</button>';
+    else html += '<span class="badge badge-m-info" title="Paste prompt into Copilot M365">Copilot</span>';
+  }
+  if (hasAndi) html += '<span class="badge badge-a">Andi / prompt</span>';
+  if (!hasChatGPT && !hasCopilot && !hasAndi && t.ug) {
+    html += '<button class="badge badge-open-btn" onclick="'+sp+'go(\''+t.ug+'\')" title="Open">Open &#8599;</button>';
+  }
+  if (t.x) html += '<span class="badge badge-new">New</span>';
+  return html;
+}
+
+function copyPrompt(idx, ev) {
+  ev.stopPropagation();
+  var t = currentTools[idx];
+  if (!t || !t.prompt) return;
+  var btn = ev.currentTarget;
+  var orig = btn.textContent;
+  function success() {
+    btn.textContent = 'Copied! \u2713';
+    btn.style.background = '#1A7F4B';
+    setTimeout(function(){ btn.textContent = orig; btn.style.background = ''; }, 2200);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(t.prompt).then(success).catch(function(){ fallbackCopy(t.prompt, success); });
+  } else {
+    fallbackCopy(t.prompt, success);
+  }
+}
+function fallbackCopy(text, cb) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try { document.execCommand('copy'); cb(); } catch(e) {}
+  document.body.removeChild(ta);
+}
+
+/* ── Featured carousel ── */
+var FEATURED = TOOLS.filter(function(t){ return t.ug || t.um; });
+var featIdx = 0, rotateTimer = null;
+
+function renderFeat(idx) {
+  var t = FEATURED[idx];
+  var badges = '';
+  if (t.ug) badges += '<button class="feat-badge feat-g" onclick="go(\''+t.ug+'\')">ChatGPT &#8599;</button>';
+  else if (t.um) badges += '<button class="feat-badge feat-m" onclick="go(\''+t.um+'\')">Copilot &#8599;</button>';
+  if (t.p.indexOf('m') >= 0 && t.um && t.ug) badges += '<button class="feat-badge feat-m" onclick="go(\''+t.um+'\')">Copilot &#8599;</button>';
+  if (t.p.indexOf('a') >= 0) badges += '<span class="feat-badge feat-info">Andi / prompt</span>';
+  var openUrl = t.ug || t.um;
+  document.getElementById('feat-inner').innerHTML =
+    '<div class="feat-top"><span class="feat-eyebrow">Featured tool</span><span class="feat-cat">'+(CAT_LABELS[t.c]||'')+'</span></div>'+
+    '<div class="feat-name">'+t.n+'</div>'+
+    '<div class="feat-desc">'+t.d+'</div>'+
+    '<div class="feat-foot">'+badges+
+    (openUrl ? '<button class="feat-open" onclick="go(\''+openUrl+'\')">Open &#8594;</button>' : '')+
+    '</div>';
+  document.getElementById('feat-dots').innerHTML = FEATURED.map(function(_,i){
+    return '<button class="fdot'+(i===idx?' on':'')+'" onclick="goFeat('+i+')"></button>';
+  }).join('');
+}
+function goFeat(idx){ featIdx=((idx%FEATURED.length)+FEATURED.length)%FEATURED.length; renderFeat(featIdx); }
+function featNav(dir){ goFeat(featIdx+dir); resetTimer(); }
+function startTimer(){ rotateTimer=setInterval(function(){ goFeat(featIdx+1); },6000); }
+function resetTimer(){ clearInterval(rotateTimer); startTimer(); }
+function pauseRotation(){ clearInterval(rotateTimer); }
+function resumeRotation(){ startTimer(); }
+
+/* ── Filter + list ── */
+function buildFilters(){
+  document.getElementById('filters').innerHTML=CATS.map(function(c){
+    return '<button class="filter-btn'+(c.id==='all'?' on':'')+'" onclick="filter(\''+c.id+'\',this)">'+c.label+'</button>';
+  }).join('');
+}
+
+function buildList(cat) {
+  currentTools = cat==='all' ? TOOLS.slice() : TOOLS.filter(function(t){return t.c===cat;});
+  document.getElementById('count').textContent = currentTools.length+' tools';
+  if (!currentTools.length){
+    document.getElementById('tool-list').innerHTML='<div style="padding:20px;color:#7A96B2;text-align:center">No tools in this category yet.</div>';
+    return;
+  }
+  document.getElementById('tool-list').innerHTML = currentTools.map(function(t,i){
+    var promptSection = '';
+    if (t.prompt) {
+      promptSection =
+        '<div class="prompt-section">'+
+          '<div class="prompt-header">'+
+            '<span class="prompt-label">Andi / Copilot prompt</span>'+
+            '<button class="copy-btn" onclick="copyPrompt('+i+',event)">Copy prompt</button>'+
+          '</div>'+
+          '<pre class="prompt-box">'+escHtml(t.prompt)+'</pre>'+
+        '</div>';
+    }
+    return '<div class="tool-row" id="tr'+i+'" onclick="tog('+i+')">'+
+      '<div class="tool-header"><span class="tool-name">'+t.n+'</span>'+
+      '<div class="tool-badges">'+makeBadges(t,true)+'</div></div>'+
+      '<div class="tool-detail"><p class="tool-desc">'+t.d+'</p>'+promptSection+'</div>'+
+      '</div>';
+  }).join('');
+}
+
+function escHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function filter(cat,btn){ document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('on');}); btn.classList.add('on'); buildList(cat); }
+function tog(i){ var el=document.getElementById('tr'+i); if(el) el.classList.toggle('open'); }
+
+renderFeat(0); startTimer(); buildFilters(); buildList('all');
+</script>
+</body>
+</html>

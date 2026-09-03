@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MTN Learning Path</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+  font-size: 14px;
+  color: #002D59;
+  background: #ffffff;
+  padding: 24px 28px 32px;
+  line-height: 1.5;
+}
+
+.intro {
+  font-size: 15px;
+  color: #3D5A80;
+  margin-bottom: 20px;
+  line-height: 1.65;
+}
+
+.option-btn {
+  display: block;
+  width: 100%;
+  background: #F0F5FB;
+  border: 1px solid #C8D8EE;
+  border-radius: 4px;
+  padding: 13px 16px;
+  text-align: left;
+  font-size: 14px;
+  font-family: inherit;
+  color: #002D59;
+  cursor: pointer;
+  line-height: 1.5;
+  margin-bottom: 8px;
+  border-left: 3px solid transparent;
+  transition: border-left-color 0.12s, background 0.12s, border-color 0.12s;
+}
+.option-btn:hover {
+  border-color: #0066FF;
+  border-left-color: #0066FF;
+  background: #EBF0FF;
+}
+
+.hint {
+  font-size: 13px;
+  color: #7A96B2;
+  margin-top: 6px;
+}
+
+.track-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.track-chip {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 12px;
+  border-radius: 2px;
+  border: 1px solid;
+}
+
+.restart-btn {
+  background: none;
+  border: none;
+  font-size: 13px;
+  color: #7A96B2;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0;
+  margin-left: 6px;
+}
+.restart-btn:hover { color: #002D59; }
+
+.track-panel {
+  border-radius: 4px;
+  padding: 20px;
+  border: 1px solid;
+  margin-bottom: 16px;
+}
+
+.track-who {
+  font-size: 14px;
+  color: #3D5A80;
+  margin-bottom: 14px;
+  line-height: 1.6;
+}
+
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.goal-text {
+  font-size: 14px;
+  color: #002D59;
+  font-style: italic;
+  margin-bottom: 16px;
+  line-height: 1.55;
+}
+
+.resource {
+  background: #ffffff;
+  padding: 11px 13px;
+  border: 1px solid #C8D8EE;
+  border-left-width: 3px;
+  margin-bottom: 7px;
+}
+.resource-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #002D59;
+  margin-bottom: 2px;
+}
+.resource-desc {
+  font-size: 13px;
+  color: #3D5A80;
+}
+
+.next-box {
+  background: #ffffff;
+  border-radius: 4px;
+  padding: 12px 13px;
+  border: 1px solid #C8D8EE;
+  margin-top: 6px;
+}
+.next-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.next-text {
+  font-size: 14px;
+  color: #002D59;
+  line-height: 1.55;
+}
+
+.browse-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.pill {
+  border: 1px solid #C8D8EE;
+  background: #F0F5FB;
+  border-radius: 2px;
+  padding: 5px 13px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  color: #3D5A80;
+}
+.pill:hover { border-color: #9AB5D5; color: #002D59; }
+
+.browse-label {
+  font-size: 13px;
+  color: #3D5A80;
+  margin-bottom: 8px;
+}
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+var TRACKS = {
+  g: {
+    label: 'General',
+    fg: '#0B7BA8', bg: '#E5F8FF', bd: '#7DD8F5', fl: '#33C0FF',
+    who: 'For everyone \u2014 the starting point if you haven\u2019t made AI a regular part of your work yet.',
+    goal: 'Use at least one AI tool on a real task every week.',
+    resources: [
+      { n: 'Getting started with AI', d: 'What\u2019s available at BMcD, which platforms to use, and what to keep in mind' },
+      { n: 'Meeting notes 2.0', d: 'Training \u2014 capture and summarize your meetings automatically' },
+      { n: 'Research that works', d: 'Training \u2014 find information faster with AI assistance' },
+      { n: 'Platform finder', d: 'Answer four questions to find the right tool for your specific work' }
+    ],
+    next: 'Pick one tool and one task from your real to-do list this week. One successful session builds more momentum than any amount of reading about it.'
+  },
+  l: {
+    label: 'Leadership',
+    fg: '#002D59', bg: '#E8EDF6', bd: '#8BA5C8', fl: '#002D59',
+    who: 'For managers, directors, and department leads who want to understand what AI means for their team\u2019s work and how to support adoption.',
+    goal: 'Build enough familiarity to champion adoption and ask the right questions.',
+    resources: [
+      { n: 'Getting started with AI', d: 'Overview of enterprise tools and what stays inside BMcD' },
+      { n: 'Innovation dashboard', d: 'Current adoption metrics and verified value across the MTN region' },
+      { n: 'Meet the MTN Innovation team', d: 'Connect with Charles Johnson and your practice\u2019s GP Champion' },
+      { n: 'Submit an idea', d: 'Nominate a team problem for a pilot \u2014 intake to decision in under two weeks' }
+    ],
+    next: 'Ask your GP Champion to run a 20-minute demo for your team. The most effective adoption signal a leader can send is making time for it.'
+  },
+  p: {
+    label: 'Power users',
+    fg: '#0044CC', bg: '#EBF0FF', bd: '#80A8FF', fl: '#0066FF',
+    who: 'For people who already use AI tools regularly and want to build more consistent, repeatable workflows \u2014 and help their team do the same.',
+    goal: 'Build one repeatable workflow and document it so others can use it.',
+    resources: [
+      { n: 'Building with Copilot', d: 'Training \u2014 automate and enhance work in PowerPoint and Excel' },
+      { n: 'Getting unstuck with an AI coach', d: 'Training \u2014 use Power Automate to solve recurring workflow blockers' },
+      { n: 'Tools and prompts library', d: '24 ready-to-use tools and prompts across six categories' },
+      { n: 'Prompt Engineering Consultant', d: 'Tool \u2014 walks you through writing optimized prompts for any task' }
+    ],
+    next: 'Find one recurring task and build a prompt or workflow around it. Share it with your team, or submit it to the library so others benefit.'
+  },
+  a: {
+    label: 'Agent creators',
+    fg: '#4A5200', bg: '#FAFDE5', bd: '#D4DD00', fl: '#C8D200',
+    who: 'For people who want to build AI agents \u2014 custom tools that automate multi-step workflows for themselves or their team.',
+    goal: 'Ship one working agent that your team actually uses.',
+    resources: [
+      { n: 'Your first agent', d: 'Training \u2014 build an AI agent that automates a multi-step workflow' },
+      { n: 'Meta-Designer for Custom GPTs', d: 'Tool \u2014 design a custom GPT from purpose through guardrails' },
+      { n: 'Scope Reviewer', d: 'Example agent \u2014 see how a production agent is structured and used' },
+      { n: 'Tools and prompts library', d: 'Browse existing agents for reference before building your own' }
+    ],
+    next: 'Connect with Charles Johnson (csjohnson@burnsmcd.com) before you build \u2014 he can connect you with the right infrastructure and prevent duplication.'
+  },
+  d: {
+    label: 'Developers',
+    fg: '#1A3D5C', bg: '#EEF3F9', bd: '#A0B8D8', fl: '#4A7AAA',
+    who: 'For people who want to build real apps, pipelines, or technical solutions using the Rapid Prototyping environment.',
+    goal: 'Deploy one working app to the Rapid Prototyping environment.',
+    resources: [
+      { n: 'Vibe coding guide', d: 'Full setup \u2014 VS Code, GitHub Copilot, and your first project structure' },
+      { n: 'Rapid Prototyping request', d: 'Submit via the IT portal to provision your GCP environment' },
+      { n: 'Process Discovery Assistant', d: 'Tool \u2014 map a workflow through conversation to clarify what to build' },
+      { n: 'Self-Serve Rapid Prototyping', d: 'IT self-service portal for environment setup and deployment' }
+    ],
+    next: 'Request your Rapid Prototyping environment via the IT portal, then work through the Vibe Coding setup guide. Charles Johnson runs developer office hours \u2014 reach out before you start.'
+  }
+};
+
+var ORDER = ['g', 'l', 'p', 'a', 'd'];
+
+function renderQuestion() {
+  document.getElementById('app').innerHTML =
+    '<p class="intro">Which of these sounds most like you right now?</p>' +
+    '<button class="option-btn" onclick="pick(\'g\')">I haven\'t really started using AI for my work yet</button>' +
+    '<button class="option-btn" onclick="pick(\'l\')">I lead or manage a team and want to support how we adopt AI</button>' +
+    '<button class="option-btn" onclick="pick(\'p\')">I use AI tools occasionally and want to build more consistent habits and workflows</button>' +
+    '<button class="option-btn" onclick="pick(\'a\')">I want to create custom AI tools or automations \u2014 things my team can actually use</button>' +
+    '<button class="option-btn" onclick="pick(\'d\')">I want to build real apps, pipelines, or technical solutions</button>' +
+    '<p class="hint">Not sure? Start with the first one \u2014 you can always switch.</p>';
+}
+
+function pick(k) {
+  var T = TRACKS[k];
+
+  var resHtml = T.resources.map(function(r) {
+    return '<div class="resource" style="border-left-color:' + T.fl + '">' +
+      '<div class="resource-name">' + r.n + '</div>' +
+      '<div class="resource-desc">' + r.d + '</div>' +
+      '</div>';
+  }).join('');
+
+  var pillsHtml = ORDER.map(function(t) {
+    var active = t === k;
+    var style = active
+      ? 'border-color:' + TRACKS[t].fg + ';color:' + TRACKS[t].fg + ';background:' + TRACKS[t].bg
+      : '';
+    return '<button class="pill" style="' + style + '" onclick="pick(\'' + t + '\')">' + TRACKS[t].label + '</button>';
+  }).join('');
+
+  document.getElementById('app').innerHTML =
+    '<div class="track-header">' +
+      '<span style="font-size:13px;color:#3D5A80">Your track:</span>' +
+      '<span class="track-chip" style="color:' + T.fg + ';background:' + T.bg + ';border-color:' + T.bd + '">' + T.label + '</span>' +
+      '<button class="restart-btn" onclick="renderQuestion()">&#8592; Start over</button>' +
+    '</div>' +
+    '<div class="track-panel" style="background:' + T.bg + ';border-color:' + T.bd + '">' +
+      '<p class="track-who">' + T.who + '</p>' +
+      '<div class="section-label" style="color:' + T.fg + '">Track goal</div>' +
+      '<p class="goal-text">' + T.goal + '</p>' +
+      '<div class="section-label" style="color:' + T.fg + '">Resources</div>' +
+      resHtml +
+      '<div class="next-box">' +
+        '<div class="next-label" style="color:' + T.fg + '">Next step</div>' +
+        '<div class="next-text">' + T.next + '</div>' +
+      '</div>' +
+    '</div>' +
+    '<p class="browse-label">Explore other tracks</p>' +
+    '<div class="browse-row">' + pillsHtml + '</div>';
+}
+
+renderQuestion();
+</script>
+</body>
+</html>

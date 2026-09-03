@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MTN Platform Finder</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+  font-size: 14px;
+  color: #002D59;
+  background: #ffffff;
+  padding: 24px 28px 32px;
+  line-height: 1.5;
+}
+
+.progress-row { display: flex; gap: 5px; margin-bottom: 20px; }
+.seg { flex: 1; height: 3px; border-radius: 1px; background: #C8D8EE; }
+.seg.done { background: #0066FF; }
+.seg.active { background: #33C0FF; }
+
+.q-count { font-size: 13px; color: #7A96B2; margin-bottom: 10px; }
+
+.q-text {
+  font-size: 18px;
+  font-weight: 700;
+  color: #002D59;
+  margin-bottom: 18px;
+  line-height: 1.35;
+}
+
+.option-btn {
+  display: block;
+  width: 100%;
+  background: #F0F5FB;
+  border: 1px solid #C8D8EE;
+  border-left: 3px solid transparent;
+  border-radius: 4px;
+  padding: 13px 16px;
+  text-align: left;
+  font-size: 14px;
+  font-family: inherit;
+  color: #002D59;
+  cursor: pointer;
+  line-height: 1.5;
+  margin-bottom: 8px;
+  transition: border-left-color 0.12s, background 0.12s;
+}
+.option-btn:hover {
+  border-color: #0066FF;
+  border-left-color: #0066FF;
+  background: #EBF0FF;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  font-size: 13px;
+  color: #7A96B2;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 4px 0;
+  margin-top: 4px;
+  display: block;
+}
+.back-btn:hover { color: #002D59; }
+
+.result-intro { font-size: 13px; color: #7A96B2; margin-bottom: 8px; }
+
+.result-card {
+  border-radius: 4px;
+  padding: 22px;
+  border: 1px solid;
+  margin-bottom: 16px;
+}
+
+.result-name {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 3px;
+  line-height: 1.2;
+}
+.result-tagline { font-size: 14px; color: #3D5A80; margin-bottom: 14px; }
+.result-desc { font-size: 14px; color: #002D59; line-height: 1.7; margin-bottom: 16px; }
+
+.strengths-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.strength-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 14px;
+  color: #002D59;
+  margin-bottom: 6px;
+}
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+
+.access-btn {
+  display: block;
+  width: 100%;
+  background: #0066FF;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 13px 18px;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.access-btn:hover { background: #0050CC; }
+
+.restart-btn {
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  color: #7A96B2;
+  padding: 4px 0;
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+.restart-btn:hover { color: #002D59; }
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+var QUESTIONS = [
+  {
+    q: 'What do you mainly want to accomplish with AI?',
+    opts: [
+      { t: 'Draft emails, summarize meetings, get quick help inside Office apps', s: { copilot: 2, andi: 1 } },
+      { t: 'Analyze complex documents and produce carefully reasoned output', s: { claude: 2, chatgpt: 1 } },
+      { t: 'Research with live web info, build workflows, or create tools for others', s: { chatgpt: 2, claude: 1 } },
+      { t: 'Search BMcD projects, systems, or internal knowledge', s: { andi: 2, copilot: 1 } }
+    ]
+  },
+  {
+    q: 'When you hit a tough problem at work, what would help most?',
+    opts: [
+      { t: 'Quick assistance right inside Teams or Outlook where I\'m already working', s: { copilot: 2, andi: 1 } },
+      { t: 'A thoughtful back-and-forth that gets the nuance and detail right', s: { claude: 2, chatgpt: 1 } },
+      { t: 'Real-time research pulling in the latest information from the web', s: { chatgpt: 2, claude: 1 } },
+      { t: 'BMcD-specific context \u2014 project history, internal systems, or people', s: { andi: 2, copilot: 1 } }
+    ]
+  },
+  {
+    q: 'Do you need the AI to search the web or access current information?',
+    opts: [
+      { t: 'Yes, often \u2014 I need current data, news, or fresh external research', s: { chatgpt: 2, claude: 1 } },
+      { t: 'Sometimes, but mostly I work with documents I already have', s: { claude: 1, copilot: 1 } },
+      { t: 'Rarely \u2014 I work with internal files and don\'t need web access', s: { andi: 2, copilot: 1 } }
+    ]
+  },
+  {
+    q: 'How would you describe your experience with AI tools?',
+    opts: [
+      { t: 'New to this \u2014 I want something simple that\'s already connected to my tools', s: { copilot: 2, andi: 1 } },
+      { t: 'I\u2019ve tried a few things and want to make more out of them', s: { claude: 1, chatgpt: 1, andi: 1 } },
+      { t: 'Regular user \u2014 I want advanced workflows, agents, or to build something', s: { chatgpt: 2, claude: 1 } }
+    ]
+  }
+];
+
+var RESULTS = {
+  andi: {
+    name: 'Andi',
+    fg: '#002D59', bg: '#E8EDF6', bd: '#8BA5C8', dot: '#002D59',
+    url: 'https://burnsmcdprod.service-now.com/esc?id=sc_cat_item&sys_id=81b992e41bb3e65056bb8441604bcb3e',
+    tagline: 'Best for BMcD-integrated workflows',
+    desc: 'Andi is built into BMcD\u2019s environment, making it the strongest choice when you\u2019re working within internal systems, searching company knowledge, or want AI that already understands your organizational context with minimal setup.',
+    strengths: [
+      'BMcD internal knowledge and systems',
+      'Low setup \u2014 already connected to your tools',
+      'Project and people search',
+      'Integrated with existing BMcD workflows'
+    ]
+  },
+  copilot: {
+    name: 'Copilot 365',
+    fg: '#0044CC', bg: '#EBF0FF', bd: '#80A8FF', dot: '#0066FF',
+    url: 'https://burnsmcdprod.service-now.com/esc?id=sc_cat_item&sys_id=d3ed73b31b1baad05940213b234bcbc1&table=sc_cat_item&searchTerm=copilot',
+    tagline: 'Best for Office-first work',
+    desc: 'Copilot 365 lives inside Teams, Outlook, Word, Excel, and PowerPoint \u2014 so it helps right where you\u2019re already working. Great for summarizing meetings, drafting emails, and building on existing documents without switching tools.',
+    strengths: [
+      'Works inside Teams, Outlook, Word, Excel',
+      'Summarizes meetings automatically',
+      'Drafts and refines documents in context',
+      'No context switching required'
+    ]
+  },
+  chatgpt: {
+    name: 'ChatGPT Enterprise',
+    fg: '#0B7BA8', bg: '#E5F8FF', bd: '#7DD8F5', dot: '#33C0FF',
+    url: 'https://burnsmcdprod.service-now.com/esc?id=sc_cat_item&sys_id=37fd07691be6d2905c71caa1604bcbdc&table=sc_cat_item&searchTerm=chatgpt',
+    tagline: 'Best for research, agents, and building',
+    desc: 'ChatGPT Enterprise combines web search, flexible reasoning, and the ability to build custom agents and automations. Best when you want to explore what AI can do or create tools \u2014 like the Scope Reviewer \u2014 that the whole team can use.',
+    strengths: [
+      'Live web search and current information',
+      'Custom GPT agents and automation',
+      'Codex for coding and scripting',
+      'Broad and flexible task handling'
+    ]
+  },
+  claude: {
+    name: 'Claude',
+    fg: '#4A5200', bg: '#FAFDE5', bd: '#D4DD00', dot: '#C8D200',
+    url: 'https://burnsmcdprod.service-now.com/esc?id=sc_cat_item&sys_id=383a378c1bc48bd056bb8441604bcb8c',
+    tagline: 'Best for analysis and nuanced reasoning',
+    desc: 'Claude excels at working through long, complex documents and producing well-structured, thoughtful output. Best when the thinking is the hard part \u2014 reviewing specs, analyzing reports, or drafting something that needs to get the detail exactly right.',
+    strengths: [
+      'Long document analysis',
+      'Nuanced, structured reasoning',
+      'High-quality writing and editing',
+      'Complex multi-step questions'
+    ]
+  }
+};
+
+var step = 0;
+var answers = [];
+
+function calcScores() {
+  var sc = { andi: 0, copilot: 0, chatgpt: 0, claude: 0 };
+  answers.forEach(function(idx, i) {
+    var s = QUESTIONS[i].opts[idx].s;
+    Object.keys(s).forEach(function(k) { sc[k] += s[k]; });
+  });
+  return sc;
+}
+
+function renderStep() {
+  if (step >= QUESTIONS.length) {
+    var sc = calcScores();
+    var winner = Object.keys(sc).sort(function(a, b) { return sc[b] - sc[a]; })[0];
+    var R = RESULTS[winner];
+    var strengthsHtml = R.strengths.map(function(s) {
+      return '<div class="strength-row"><div class="dot" style="background:' + R.dot + '"></div>' + s + '</div>';
+    }).join('');
+    document.getElementById('app').innerHTML =
+      '<p class="result-intro">Based on your answers</p>' +
+      '<div class="result-card" style="background:' + R.bg + ';border-color:' + R.bd + '">' +
+        '<div class="result-name" style="color:' + R.fg + '">' + R.name + '</div>' +
+        '<div class="result-tagline">' + R.tagline + '</div>' +
+        '<p class="result-desc">' + R.desc + '</p>' +
+        '<div class="strengths-label" style="color:' + R.fg + '">Where it shines</div>' +
+        strengthsHtml +
+      '</div>' +
+      '<a class="access-btn" href="' + R.url + '" target="_blank" rel="noopener">Request access in ServiceNow &rarr;</a>' +
+      '<button class="restart-btn" onclick="restart()">Start over</button>';
+    return;
+  }
+
+  var Q = QUESTIONS[step];
+  var prog = QUESTIONS.map(function(_, i) {
+    return '<div class="seg ' + (i < step ? 'done' : i === step ? 'active' : '') + '"></div>';
+  }).join('');
+  var optsHtml = Q.opts.map(function(o, i) {
+    return '<button class="option-btn" onclick="choose(' + i + ')">' + o.t + '</button>';
+  }).join('');
+  var backHtml = step > 0 ? '<button class="back-btn" onclick="goBack()">&#8592; Back</button>' : '';
+
+  document.getElementById('app').innerHTML =
+    '<div class="progress-row">' + prog + '</div>' +
+    '<div class="q-count">Question ' + (step + 1) + ' of ' + QUESTIONS.length + '</div>' +
+    '<div class="q-text">' + Q.q + '</div>' +
+    optsHtml + backHtml;
+}
+
+function choose(i) { answers = answers.slice(0, step); answers.push(i); step++; renderStep(); }
+function goBack() { if (step > 0) { step--; answers = answers.slice(0, step); renderStep(); } }
+function restart() { step = 0; answers = []; renderStep(); }
+
+renderStep();
+</script>
+</body>
+</html>
